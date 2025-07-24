@@ -1,2 +1,14 @@
 # local environment variables
 .env
+
+# PyInstaller artifacts
+/build/
+/*.spec
+
+# Python cache
+__pycache__/
+/*.py[cod]
+
+# Virtual environments
+venv/
+env/
