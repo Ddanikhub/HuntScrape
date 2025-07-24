@@ -3,6 +3,7 @@
 
 # PyInstaller artifacts
 /build/
+/dist/
 /*.spec
 
 # Python cache
