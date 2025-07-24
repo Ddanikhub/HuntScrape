@@ -4,8 +4,11 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium import webdriver
-
+import smtplib
+from email.message import EmailMessage
 from selenium.webdriver.support import expected_conditions as EC
+import os
+from dotenv import load_dotenv
 # 1) Set up Chrome options to remove extra logging
 options = webdriver.ChromeOptions()
 options.timeouts = { 'script': 5000 }
@@ -18,7 +21,27 @@ options.add_experimental_option("detach", True)
 # Launch the browser quietly
 driver = webdriver.Chrome(options=options)
 
+load_dotenv()
 
+def send_email(subject: str, body: str):
+    SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
+    SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
+    USER      = os.getenv("SMTP_USER")
+    PASS      = os.getenv("SMTP_PASS")
+    recipients = [addr.strip() for addr in os.getenv("SMTP_TO", "").split(",") if addr.strip()]
+
+    msg = EmailMessage()
+    msg["From"]    = USER
+    # join them for the header
+    msg["To"]      = ", ".join(recipients)
+    msg["Subject"] = subject
+    msg.set_content(body)
+
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as smtp:
+        smtp.ehlo()
+        smtp.starttls()
+        smtp.login(USER, PASS)
+        smtp.send_message(msg, to_addrs=recipients)
 
 
 driver.get('https://nevada.licensing.app')
@@ -51,11 +74,13 @@ while True:
         is_checked = check_input.is_selected()
         assert is_checked == False
 
-        date_input = driver.find_element(By.NAME, "residencyDate")
-        date_input.clear()  # Clear field
+        # 2) Fill the date field
+        date_field = WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located((By.NAME, "residencyDate"))
+        )
+        date_field.clear()
+        date_field.send_keys("072005")  # your MMDDYY or whatever format
 
-        insert_date = "072005"
-        date_input.send_keys(insert_date)  # Enter text
         submit_btn = WebDriverWait(driver, 20).until(
         EC.element_to_be_clickable(
             (By.XPATH, "//button[normalize-space(.)='Submit']")
@@ -72,6 +97,16 @@ while True:
         )
         print(f"[{time.strftime('%X')}] 🎉 You are now ELIGIBLE!")
         winsound.MessageBeep()   # notify you
+        send_email(
+            subject="🏷️ Nevada Tag Available!",
+            body=(
+                "Good news — the FCFS page just showed you are eligible. "
+                "Head over to https://nevada.licensing.app"
+                " to add to cart!"
+            )
+        )
+
+        driver.quit()
 
     except TimeoutException:
         print(f"[{time.strftime('%X')}] Still not ELIGIBLE…")
