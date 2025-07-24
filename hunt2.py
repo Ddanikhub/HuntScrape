@@ -4,7 +4,7 @@ import threading
 import os
 import smtplib
 from email.message import EmailMessage
-
+from selenium.common.exceptions import NoSuchElementException
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
@@ -14,12 +14,31 @@ from selenium.webdriver.support import expected_conditions as EC
 
 # ————— Setup Chrome —————
 options = webdriver.ChromeOptions()
-options.timeouts = {'script': 5000}
-options.page_load_strategy = 'eager'
 options.add_argument("--no-sandbox")
 options.add_argument("--start-maximized")
-options.add_experimental_option("excludeSwitches", ["enable-logging"])
 options.add_argument("--log-level=3")
+options.add_experimental_option("excludeSwitches", ["enable-logging", "enable-password-manager"])
+
+# 1) Turn off the password service and leak detection prefs
+prefs = {
+    "safebrowsing.enabled": True,
+    "credentials_enable_service": False,
+    "profile.password_manager_enabled": False,
+    "profile.password_leak_detection_enabled": False,
+    "profile.password_manager_leak_detection": False
+}
+options.add_experimental_option("prefs", prefs)
+
+# 2) Disable the feature flags
+options.add_argument(
+    "--disable-features="
+    "PasswordLeakDetection,"
+    "PasswordManagerOnboarding,"
+    "PasswordManagerService"
+)
+options.add_argument("--disable-blink-features=PasswordLeakDetection")
+
+# 3) Keep the browser open
 options.add_experimental_option("detach", True)
 
 driver = webdriver.Chrome(options=options)
@@ -54,7 +73,42 @@ def send_email(subject: str, body: str) -> bool:
 
 # ————— Navigate once —————
 driver.get('https://nevada.licensing.app')
-time.sleep(30)  # give the page its initial load
+time.sleep(5)
+def log_in():
+
+    log_in_btn = WebDriverWait(driver, 20).until(
+                    EC.element_to_be_clickable((By.XPATH, "//button[normalize-space()='Log In']"))
+                )
+    log_in_btn.click()
+    time.sleep(5)
+    user_email = WebDriverWait(driver, 20).until(
+                    EC.presence_of_element_located((By.XPATH, "//input[@autocomplete='username']"))
+                )
+    user_email.click()
+    user_email.clear()
+    USER_EMAIL = os.getenv("USER_EMAIL")
+    user_email.send_keys(USER_EMAIL)
+
+    user_pass = WebDriverWait(driver, 20).until(
+                    EC.presence_of_element_located((By.XPATH, "//input[@autocomplete='current-password']"))
+                )
+    user_pass.click()
+    user_pass.clear()
+    USER_PASS = os.getenv("USER_PASS")
+    user_pass.send_keys(USER_PASS)
+
+    log_in_btn_2 = WebDriverWait(driver, 20).until(
+                    EC.element_to_be_clickable((By.ID, "login-submit"))
+                )
+    log_in_btn_2.click()
+    time.sleep(5)
+    nav_link = driver.find_element(By.LINK_TEXT, "First Come, First Served Tags")
+
+
+    nav_link.click()
+
+log_in()
+time.sleep(5)  # give the page its initial load
 
 # ————— Heartbeat thread —————
 def keep_alive():
@@ -74,7 +128,7 @@ def keep_alive():
         except:
             pass
 
-        time.sleep(20 * 60)  # every 3 minutes
+        time.sleep(14 * 60)  # every 3 minutes
 
 threading.Thread(target=keep_alive, daemon=True).start()
 
@@ -92,6 +146,22 @@ send_email(
 POST_REFRESH_WAIT = 30  # seconds to wait per attempt
 
 while True:
+
+    timeout_buttons = driver.find_elements(
+        By.XPATH,
+        "//timeout-modal//button[normalize-space()='Continue']"
+    )
+    if timeout_buttons:
+        timeout_buttons[0].click()
+
+    try:
+        driver.find_element(By.XPATH, "//button[normalize-space()='Log In']")
+        # if we get here, the button exists → we’re logged out
+        log_in()
+    except NoSuchElementException:
+        # button not found → we’re still logged in, do nothing
+        pass
+
     on_form = bool(driver.find_elements(
     By.CSS_SELECTOR,
     "residency-form > div.container"
@@ -113,7 +183,8 @@ while True:
                 EC.presence_of_element_located((By.NAME, "residencyDate"))
             )
             date_field.clear()
-            date_field.send_keys("072005")
+            RESIDENCY_DATE = os.getenv("RESIDENCY_DATE")
+            date_field.send_keys(RESIDENCY_DATE)
 
             # 3) Submit
             submit_btn = WebDriverWait(driver, 20).until(
