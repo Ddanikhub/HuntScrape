@@ -195,7 +195,7 @@ while True:
         # 4) Wait for ELIGIBLE badge
         print("Waiting form ELIGIBILITY")
         WebDriverWait(driver, POST_REFRESH_WAIT).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, "p.eligible"))
+            EC.visibility_of_element_located((By.XPATH, "//mat-chip[normalize-space()='ELIGIBLE']"))
         )
         print(f"[{time.strftime('%X')}] 🎉 You are now ELIGIBLE!")
         winsound.MessageBeep()
@@ -203,12 +203,13 @@ while True:
         # 5) Email alert
         if send_email(
             subject="🏷️ Nevada Tag Available!",
-            body="The FCFS page just showed ‘ELIGIBLE’. Head to the site to add to cart!"
+            body="The FCFS page just showed ‘ELIGIBLE’. Head to https://nevada.licensing.app to add to cart!"
         ):
             print("Notification email delivered.")
         else:
             print("Email failed — check SMTP settings.")
 
+        time.sleep(5 * 60)
 
     except TimeoutException:
         print(f"[{time.strftime('%X')}] Still not ELIGIBLE—retrying…")
