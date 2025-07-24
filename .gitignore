@@ -1,6 +1,6 @@
 # local environment variables
 .env
-
+/*.exe
 # PyInstaller artifacts
 /build/
 /dist/
