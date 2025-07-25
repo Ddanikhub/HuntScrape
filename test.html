@@ -1,0 +1,695 @@
+<body id="app">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe height="0" src="https://www.googletagmanager.com/ns.html?id=GTM-NKC8BRP"
+            style="display:none;visibility:hidden" width="0"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) --->
+    <script crossorigin="anonymous" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+        src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <app ng-version="4.2.6"><router-outlet></router-outlet><app-layout class="">
+            <mat-sidenav-container class="mat-drawer-container mat-sidenav-container">
+                <div class="mat-drawer-backdrop"></div>
+                <div class="cdk-visually-hidden cdk-focus-trap-anchor" tabindex="-1"></div><mat-sidenav
+                    class="hidden--desktop bg--lightgray mat-drawer mat-sidenav ng-tns-c1-0 ng-trigger ng-trigger-transform mat-drawer-over"
+                    mode="over" ng-reflect-mode="over" ng-reflect-opened="false" opened="false"
+                    style="visibility: hidden;" tabindex="-1">
+                    <mobile-nav ng-reflect-mobilenav="[object Object]" ng-reflect-user="[object Object]">
+                        <nav role="nav">
+                            <mat-list class="hidden--tablet hidden--desktop bg--lightgray mat-list" role="list">
+                                <a class="mat-list-item" href="/licenses" mat-list-item=""
+                                    ng-reflect-router-link="/licenses"
+                                    ng-reflect-router-link-active="list__item--active" role="listitem"
+                                    routerlinkactive="list__item--active">
+                                    <div class="mat-list-item-content">
+                                        <div class="mat-list-item-ripple mat-ripple" mat-ripple=""
+                                            ng-reflect-disabled="true"
+                                            ng-reflect-trigger="https://nevada.licensing.app/l"></div>
+                                        <div class="mat-list-text"></div>
+                                        Buy Licenses
+                                    </div>
+                                </a>
+                                <a class="mat-list-item" href="/vehicles" mat-list-item=""
+                                    ng-reflect-router-link="/vehicles"
+                                    ng-reflect-router-link-active="list__item--active" role="listitem"
+                                    routerlinkactive="list__item--active">
+                                    <div class="mat-list-item-content">
+                                        <div class="mat-list-item-ripple mat-ripple" mat-ripple=""
+                                            ng-reflect-disabled="true"
+                                            ng-reflect-trigger="https://nevada.licensing.app/v"></div>
+                                        <div class="mat-list-text"></div>
+                                        Vessel Registration
+                                    </div>
+                                </a>
+                                <a class="mat-list-item list__item--active" href="/first_come_first_serve"
+                                    mat-list-item="" ng-reflect-router-link="/first_come_first_serve"
+                                    ng-reflect-router-link-active="list__item--active" role="listitem"
+                                    routerlinkactive="list__item--active">
+                                    <div class="mat-list-item-content">
+                                        <div class="mat-list-item-ripple mat-ripple" mat-ripple=""
+                                            ng-reflect-disabled="true"
+                                            ng-reflect-trigger="https://nevada.licensing.app/f"></div>
+                                        <div class="mat-list-text"></div>
+                                        First Come, First Served Tags
+                                    </div>
+                                </a>
+                                <a class="mat-list-item" href="/products" mat-list-item=""
+                                    ng-reflect-router-link="/products"
+                                    ng-reflect-router-link-active="list__item--active" role="listitem"
+                                    routerlinkactive="list__item--active">
+                                    <div class="mat-list-item-content">
+                                        <div class="mat-list-item-ripple mat-ripple" mat-ripple=""
+                                            ng-reflect-disabled="true"
+                                            ng-reflect-trigger="https://nevada.licensing.app/p"></div>
+                                        <div class="mat-list-text"></div>
+                                        AIS Decal
+                                    </div>
+                                </a>
+                                <a class="mat-list-item" href="/donations" mat-list-item=""
+                                    ng-reflect-router-link="/donations"
+                                    ng-reflect-router-link-active="list__item--active" role="listitem"
+                                    routerlinkactive="list__item--active">
+                                    <div class="mat-list-item-content">
+                                        <div class="mat-list-item-ripple mat-ripple" mat-ripple=""
+                                            ng-reflect-disabled="true"
+                                            ng-reflect-trigger="https://nevada.licensing.app/d"></div>
+                                        <div class="mat-list-text"></div>
+                                        Donate
+                                    </div>
+                                </a>
+                                <a class="mat-list-item" href="/certifications" mat-list-item=""
+                                    ng-reflect-router-link="/certifications"
+                                    ng-reflect-router-link-active="list__item--active" role="listitem"
+                                    routerlinkactive="list__item--active">
+                                    <div class="mat-list-item-content">
+                                        <div class="mat-list-item-ripple mat-ripple" mat-ripple=""
+                                            ng-reflect-disabled="true"
+                                            ng-reflect-trigger="https://nevada.licensing.app/c"></div>
+                                        <div class="mat-list-text"></div>
+                                        Get Certified
+                                    </div>
+                                </a>
+                            </mat-list>
+                        </nav>
+                    </mobile-nav>
+                </mat-sidenav>
+                <div class="cdk-visually-hidden cdk-focus-trap-anchor" tabindex="-1"></div><mat-sidenav-content
+                    class="mat-drawer-content mat-sidenav-content" style="margin-left: 0px; margin-right: 0px;">
+                    <div class="main-container" ng-reflect-klass="main-container">
+                        <notification>
+                        </notification>
+                        <app-navbar ng-reflect-mobilenav="[object Object]"><mat-toolbar
+                                class="app-header-bg mat-toolbar" role="toolbar">
+                                <div class="mat-toolbar-layout"><mat-toolbar-row class="mat-toolbar-row">
+                                        <button class="hidden--tablet hidden--desktop mat-icon-button"
+                                            mat-icon-button=""><span class="mat-button-wrapper">
+                                                <mat-icon aria-hidden="true" class="mat-icon material-icons"
+                                                    role="img">menu</mat-icon>
+                                            </span>
+                                            <div class="mat-button-ripple mat-ripple mat-button-ripple-round"
+                                                matripple="" ng-reflect-centered="true" ng-reflect-disabled="false"
+                                                ng-reflect-trigger="[object HTMLButtonElement]"></div>
+                                            <div class="mat-button-focus-overlay"></div>
+                                        </button>
+                                        <a class="nav--brand" href="/" ng-reflect-router-link="/" routerlink="/">
+                                            <img alt="Agency Logo"
+                                                class="nav--logo flex__row hidden--tablet hidden--desktop"
+                                                src="https://ams-production-115850661822.s3-us-gov-west-1.amazonaws.com/contract_configs/production/311/images/new_NDOW_logo.png?1742305119" />
+                                            <img alt="Agency Logo" class="nav--logo flex__row hidden--phone"
+                                                src="https://ams-production-115850661822.s3-us-gov-west-1.amazonaws.com/contract_configs/production/311/images/new_NDOW_logo.png?1742305119" />
+                                            <span class="hidden--phone">Nevada Department of Wildlife</span>
+                                        </a>
+                                        <span class="flex__space--full"></span>
+                                        <span class="hidden--phone flex__row">
+                                            <countdown-timer style="margin-right: 1em;">
+                                            </countdown-timer>
+                                        </span>
+                                        <div>
+                                            <div aria-haspopup="true" class="nav--selected_customer" mat-button=""
+                                                ng-reflect-menu="[object Object]">
+                                                <span>
+                                                    Hi DANIEL
+                                                    <span class="hidden--phone">G DOROHOV</span>
+                                                </span>
+                                                <br />
+                                                <strong>Account &amp; Details</strong>
+                                                <mat-icon aria-hidden="true" class="mat-icon material-icons"
+                                                    role="img">keyboard_arrow_down</mat-icon>
+                                            </div>
+                                            <mat-menu class="ng-tns-c6-1" ng-reflect-overlap-trigger="false"
+                                                role="menu"></mat-menu>
+                                        </div>
+                                        <button class="mat-icon-button mat-primary" color="primary" mat-icon-button=""
+                                            ng-reflect-color="primary"><span class="mat-button-wrapper">
+                                                <i class="material-icons mdl-badge mdl-badge--overlap">shopping_cart</i>
+                                            </span>
+                                            <div class="mat-button-ripple mat-ripple mat-button-ripple-round"
+                                                matripple="" ng-reflect-centered="true" ng-reflect-disabled="false"
+                                                ng-reflect-trigger="[object HTMLButtonElement]"></div>
+                                            <div class="mat-button-focus-overlay"></div>
+                                        </button>
+                                    </mat-toolbar-row></div>
+                            </mat-toolbar>
+                            <mat-toolbar class="bg--lightgray hidden--phone mat-toolbar" role="toolbar">
+                                <div class="mat-toolbar-layout"><mat-toolbar-row class="mat-toolbar-row">
+                                        <nav class="main-navigation" role="nav">
+                                            <a class="main-navigation__link" href="/licenses"
+                                                ng-reflect-router-link="/licenses"
+                                                ng-reflect-router-link-active="main-navigation__link-active">
+                                                Buy Licenses
+                                            </a>
+                                            <a class="main-navigation__link" href="/vehicles"
+                                                ng-reflect-router-link="/vehicles"
+                                                ng-reflect-router-link-active="main-navigation__link-active">
+                                                Vessel Registration
+                                            </a>
+                                            <a class="main-navigation__link main-navigation__link-active"
+                                                href="/first_come_first_serve"
+                                                ng-reflect-router-link="/first_come_first_serve"
+                                                ng-reflect-router-link-active="main-navigation__link-active">
+                                                First Come, First Served Tags
+                                            </a>
+                                            <a class="main-navigation__link" href="/products"
+                                                ng-reflect-router-link="/products"
+                                                ng-reflect-router-link-active="main-navigation__link-active">
+                                                AIS Decal
+                                            </a>
+                                            <a class="main-navigation__link" href="/donations"
+                                                ng-reflect-router-link="/donations"
+                                                ng-reflect-router-link-active="main-navigation__link-active">
+                                                Donate
+                                            </a>
+                                            <a class="main-navigation__link" href="/certifications"
+                                                ng-reflect-router-link="/certifications"
+                                                ng-reflect-router-link-active="main-navigation__link-active">
+                                                Get Certified
+                                            </a>
+                                        </nav>
+                                    </mat-toolbar-row></div>
+                            </mat-toolbar>
+                        </app-navbar>
+                        <main aria-live="polite">
+                            <router-outlet></router-outlet><first-come-first-serve><residency-form>
+                                </residency-form>
+                                <div class="container first-come-first-serve list">
+                                    <div class="mdl-grid fcfs-header">
+                                        <div class="mdl-grid block--full fcfs-header-title">
+                                            <div
+                                                class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet mdl-cell--4-col-phone text--gray-med">
+                                                <h1 class="">First Come, First Served</h1>
+                                            </div>
+                                            <div
+                                                class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-cell--4-col-phone fcfs-header-connection-status">
+                                                <p class="space--bottom-5">Connection Status:</p>
+                                                <mat-chip aria-disabled="false" aria-selected="false"
+                                                    class="text--md block--full display--block content--block padding--10 space--bottom-5 d-flex flex__align--center mat-chip mat-success"
+                                                    color="success" ng-reflect-color="success" role="option"
+                                                    tabindex="-1">
+                                                    <span class="">
+                                                        <mat-icon aria-hidden="true"
+                                                            class="animate--spin-reverse mat-icon material-icons"
+                                                            role="img">cached</mat-icon> You are seeing all available
+                                                        tags
+                                                    </span>
+                                                </mat-chip>
+                                                <p class="text--xs space--top__none">Last connection health ping at
+                                                    7/23/25 3:58:24 PM
+                                                </p>
+                                                <p class="text--xs space--top__none">
+                                                    The data on this page updates instantly and automatically.
+                                                    Please do not click the refresh button as re-establishing your
+                                                    connection after a refresh may take several seconds.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="mdl-grid block--full">
+                                        </div>
+                                        <div class="mdl-cell mdl-cell--12-col">
+                                            <div>
+                                                <mat-card class="mdl-cell mdl-cell--12-col space--bottom-20 mat-card">
+                                                    <div class="hidden--desktop card-title">
+                                                        <p class="eligible" color="success">ELIGIBLE</p>
+                                                    </div>
+                                                    <div class="mdl-grid">
+                                                        <div
+                                                            class="mdl-cell mdl-cell--2-col hidden--tablet hidden--phone image-container">
+                                                            <img
+                                                                src="https://ams-production-115850661822.s3-us-gov-west-1.amazonaws.com/license_products/production/432/storefront_images/antelope_HLTE_500.jpeg?1623423370" />
+                                                        </div>
+                                                        <div
+                                                            class="mdl-cell mdl-cell--7-col mdl-cell--7-col-tablet mdl-cell--4-col-phone">
+                                                            <div class="mdl-grid">
+                                                                <div
+                                                                    class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone text--normal-weight">
+                                                                    <mat-chip aria-disabled="false"
+                                                                        aria-selected="false"
+                                                                        class="hidden--tablet hidden--phone mat-chip mat-success"
+                                                                        color="success" ng-reflect-color="success"
+                                                                        role="option" tabindex="-1">ELIGIBLE
+                                                                    </mat-chip>
+                                                                    <span class="product-name">Res Antelope Horns Longer
+                                                                        Than Ears Tag</span>
+                                                                </div>
+                                                                <div
+                                                                    class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--3-col-phone">
+                                                                    <p>
+                                                                        Unit: 061, 062, 064, 071, 073
+                                                                        •
+                                                                        Archery
+                                                                        •
+                                                                        Aug 01, 2025 - Aug 21, 2025
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div
+                                                            class="mdl-cell mdl-cell--1-col mdl-cell--3-col-tablet mdl-cell--1-col-phone text--center">
+                                                            <h3 class="text--normal-weight">
+                                                                $61.00
+                                                            </h3>
+                                                        </div>
+                                                        <div
+                                                            class="mdl-cell mdl-cell--2-col mdl-cell--5-col-tablet mdl-cell--3-col-phone">
+                                                            <div mattooltipposition="above" ng-reflect-message=""
+                                                                ng-reflect-position="above"
+                                                                style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                                                                <button
+                                                                    class="form__input--full btn--cta mat-raised-button mat-primary cart-button"
+                                                                    type="button">
+                                                                    <mat-icon aria-hidden="true"
+                                                                        class="mat-icon material-icons"
+                                                                        role="img">shopping_cart</mat-icon> Add To Cart
+                                                                </button>
+                                                            </div>
+                                                            <p class="text--center">
+                                                                <span class="quantity-available">1 available</span>
+                                                            </p>
+                                                            <p class="warning">
+                                                                <span class="days-remaining"><b>28 days</b> until season
+                                                                    ends</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </mat-card>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mdl-mega-footer first-come-first-serve details">
+                                    <div class="container">
+                                        <div class="mdl-grid block--full">
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h2>How does it work?</h2>
+                                            </div>
+                                            <div
+                                                class="mdl-cell mdl-cell--3-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+                                                <div class="icon">
+                                                    <mat-icon aria-hidden="true" class="mat-icon material-icons"
+                                                        role="img">query_builder</mat-icon>
+                                                </div>
+                                                <div class="help-text space--bottom-20 space--top-20">
+                                                    <div>You will have 5 minutes once a tag has been added to your cart
+                                                        to checkout. Once that timer runs out, your tag will be taken
+                                                        from your cart, and will re appear on the first come, first
+                                                        served list after a randomized time period. </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="mdl-cell mdl-cell--3-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+                                                <div class="icon">
+                                                    <mat-icon aria-hidden="true" class="mat-icon material-icons"
+                                                        role="img">create</mat-icon>
+                                                </div>
+                                                <div class="help-text space--bottom-20 space--top-20">
+                                                    <div>To ensure a quick checkout, make sure your payment and shipping
+                                                        information is up to date before adding a tag to your cart. You
+                                                        can make changes to this information in your profile. </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="mdl-cell mdl-cell--3-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+                                                <div class="icon">
+                                                    <mat-icon aria-hidden="true" class="mat-icon material-icons"
+                                                        role="img">shopping_cart</mat-icon>
+                                                </div>
+                                                <div class="help-text space--bottom-20 space--top-20">
+                                                    <div>You are allowed one tag in your cart at a time. If you want to
+                                                        purchase multiple tags, you will have to purchase them in
+                                                        separate transactions. This ensures that the first come first
+                                                        served checkout process is fair for all hunters. </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="mdl-cell mdl-cell--3-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+                                                <div class="icon">
+                                                    <mat-icon aria-hidden="true" class="mat-icon material-icons"
+                                                        role="img">local_shipping</mat-icon>
+                                                </div>
+                                                <div class="help-text space--bottom-20 space--top-20">
+                                                    <div>Take shipping times into account when purchasing your tags.
+                                                        Some tags may have few days left in-season and standard mail
+                                                        would arrive after the season ends. Typical standard mail times
+                                                        are 5-7 business days. Overnight shipping is available for an
+                                                        increased fee and tags are free to be picked up at an NDOW
+                                                        office during business hours. </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mdl-mega-footer first-come-first-serve faq">
+                                    <div class="container">
+                                        <div class="mdl-grid block--full">
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h2>Frequently Asked Questions</h2>
+                                            </div>
+
+                                            "ng-reflect-ng-for-of": "[object Object],[object Object"
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    What is the First Come, First Served (FCFS) program?
+                                                </h4>
+                                                <p>A way for Nevada to offer additional hunting opportunities to the
+                                                    public. The Department's goal is to not have any tag go unused and
+                                                    this program allows us to offer returned tags to all eligible
+                                                    hunters.</p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    Why are these tags available in this program?
+                                                </h4>
+                                                <p>The tags available for purchase in the FCFS program are tags not
+                                                    issued in the draws, returned to NDOW with no eligible alternate, or
+                                                    was returned with less than 14 days prior to the start of the
+                                                    season.</p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    When do FCFS tags become available for purchase?
+                                                </h4>
+                                                <p>Tags eligible for the FCFS program will appear for purchase at a
+                                                    randomized time after a tag has been processed by NDOW. </p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    Can anyone purchase a FCFS tag?
+                                                </h4>
+                                                <p>Customers with an active NV hunting license who meet the eligibility
+                                                    criteria for the tag being offered will be able to purchase a tag
+                                                    from the FCFS program. </p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    How can I receive my FCFS tag once I’ve purchased it?
+                                                </h4>
+                                                <p>Tags can be shipped standard, overnighted, or available for pick up
+                                                    at NDOW offices around the state during regular office hours.
+                                                    Shipping fees are nonrefundable. NDOW and Gordon-Darby are not
+                                                    responsible for the timing of the shipping carrier.</p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    Will I lose my bonus points if I purchase a FCFS tag?
+                                                </h4>
+                                                <p>Yes. All standard draw rules apply to purchased FCFS tags, including
+                                                    the loss of bonus points and applied waiting periods. </p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    Will I be in a waiting period if I purchase a FCFS tag?
+                                                </h4>
+                                                <p>Yes. All standard draw rules apply to purchased FCFS tags, including
+                                                    the loss of bonus points and applied waiting periods.</p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    I applied and was unsuccessful for the same tag in the main draw,
+                                                    why is it available in the FCFS program?
+                                                </h4>
+                                                <p>The tags available for purchase in the FCFS program were returned to
+                                                    NDOW with no eligible alternate or was returned less than 14 days
+                                                    prior to the start of the season. </p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    Can I purchase a resident tag if I am a nonresident?
+                                                </h4>
+                                                <p>No, tags will be available for purchase only to those matching the
+                                                    original residency assigned to the tag. </p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    Can I buy more than one FCFS tag?
+                                                </h4>
+                                                <p>Yes, but only through separate transactions and for separate species.
+                                                    Only one tag can be placed in a shopping cart at a time and will be
+                                                    the only item, outside of a hunting license, that can be purchased
+                                                    at that time. </p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    Can I return my purchased FCFS tag?
+                                                </h4>
+                                                <p>Yes. Returned FCFS tags will again appear for purchase through the
+                                                    FCFS program at a random time after the tag has been processed by
+                                                    NDOW. Bonus points will be reinstated if the tag is received 1-day
+                                                    prior to the start of the tag's season.</p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    Do I need a hunting license to purchase a FCFS tag?
+                                                </h4>
+                                                <p>Yes. If you wish to purchase a FCFS tag and do not currently hold an
+                                                    active Nevada hunting license, you will be prompted to purchase a
+                                                    license along with your tag at the time of checkout. </p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    Do I need a hunter’s safety certification before purchasing a FCFS
+                                                    tag?
+                                                </h4>
+                                                <p>Yes, to anyone born after January 1, 1960. If you do not currently
+                                                    have a hunter’s safety certification attached to your account, you
+                                                    will not be allowed to select a FCFS tag that is currently available
+                                                    for purchase.</p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    I marked to be an alternate why wasn’t I assigned a FCFS tag?
+                                                </h4>
+                                                <p>Any tag not matching an alternate's first hunt choice selection or
+                                                    returned with fewer than 14 days before the season opens are offered
+                                                    in the FCFS program.</p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    Why is my account suspended from the FCFS program?
+                                                </h4>
+                                                <p>NDOW reserves the right to suspend any account for suspicious
+                                                    activity to ensure the process is fair to everyone. This includes
+                                                    any account that has excessive amounts of “Adds to Cart” without
+                                                    purchasing.</p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    Why don’t I see the same tags available as my friend?
+                                                </h4>
+                                                <p>Customers who currently hold a tag will not be shown available FCFS
+                                                    tags of the same species. A customer can only be awarded one tag per
+                                                    species, per season. </p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    Why am I not seeing any tags?
+                                                </h4>
+                                                <p>Tags available in the FCFS program are randomized. If no tags are
+                                                    showing, it does not mean that there are not tags available. Keep
+                                                    checking back to see if a tag has completed its randomization time.
+                                                </p>
+                                            </div>
+                                            <div class="mdl-cell mdl-cell--12-col">
+                                                <h4>
+                                                    <mat-icon aria-hidden="true"
+                                                        class="hidden--tablet hidden--phone mat-icon material-icons"
+                                                        role="img">help</mat-icon>
+                                                    Why am I being locked out of the FCFS system?
+                                                </h4>
+                                                <p>A person is limited to adding one tag to their shopping cart in a
+                                                    7-day period. Make sure the tag you add to your cart is the one you
+                                                    intend to purchase. Check back later to continue participation in
+                                                    the FCFS program.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </first-come-first-serve>
+                        </main>
+                        <app-footer>
+                            <footer class="main__footer app-footer-bg">
+                                <div class="mdl-cell mdl-cell--12-col" style="padding:0 20px;">
+                                    <div class="main__footer-brand" style="margin:0;">
+                                        <img alt="Agency Logo" height="35"
+                                            src="https://ams-production-115850661822.s3-us-gov-west-1.amazonaws.com/contract_configs/production/311/images/new_NDOW_logo.png?1742305119" />
+                                    </div>
+                                    <div>
+                                        <div><a href="http://ndow.org/">NDOW.org</a> <a
+                                                href="https://www.facebook.com/NvDOW/?ref=br_rs%22">Visit NDOW Social
+                                                Media<br /></a><br /></div>
+                                    </div>
+                                </div>
+                            </footer>
+                        </app-footer>
+                    </div>
+                </mat-sidenav-content>
+
+            </mat-sidenav-container>
+
+
+
+        </app-layout></app>
+    <script>
+        const setFaviconUrl = () => {
+            const faviconElement = document.getElementById('favicon')
+            const domain = window.location.hostname.split('.')[0]
+            if (domain == 'nevada') {
+                faviconElement.href = "assets/images/favicon_nv.png"
+            } else if (domain == 'massfishhunt') {
+                faviconElement.href = "assets/images/favicon_ma.png"
+            } else if (domain == 'decals') {
+                // Change to "favicon_ny" when the favicon is provided
+                faviconElement.href = "assets/images/favicon_ams.png"
+            }
+        }
+
+        // TODO: load this dynamically via a contract config
+        function loadZendeskScript() {
+            var knownContracts = [
+                {
+                    name: 'nevada',
+                    subdomain: 'nevada',
+                    src: 'https://static.zdassets.com/ekr/snippet.js?key=ee637346-66dd-4a9f-85b2-6ce670a45839',
+                    id: 'ze-snippet',
+                    html: null,
+                    openNewTab: true,
+                },
+                {
+                    name: 'new-york',
+                    subdomain: 'decals',
+                    src: 'https://static.zdassets.com/ekr/snippet.js?key=23200d53-c517-42b0-a05c-fa1699e02fa3',
+                    id: 'ze-snippet',
+                    html: null,
+                    openNewTab: true,
+                },
+                {
+                    name: 'massachusetts',
+                    subdomain: 'massfishhunt',
+                    src: 'https://static.zdassets.com/ekr/snippet.js?key=dbdd58c5-bae5-4e86-9499-fb422d0a384c',
+                    id: 'ze-snippet',
+                    html: null,
+                    openNewTab: false,
+                }
+            ]
+
+            var hostname = window.location.hostname || '';
+            // Need to use Array#filter because IE11 doesn't support Array#find
+            var contract = knownContracts.filter(function (contract) {
+                return hostname.indexOf(contract.subdomain) > -1
+            })[0]
+
+            if (contract) {
+                var script = document.createElement('script');
+                // Prevent dynamically appended scripts from defaulting to async
+                script.async = false;
+
+                if (contract.src) script.src = contract.src;
+                if (contract.id) script.id = contract.id;
+                if (contract.html) script.innerHTML = contract.html;
+
+                if (contract.openNewTab) {
+                    if (contract.name == "new-york") {
+                        script.onload = function () {
+                            zE("webWidget:on", "open", function () {
+                                return window.open('https://nydec.zendesk.com/hc/en-us', '_blank');
+                            });
+                        }
+                    } else if (contract.name == "nevada") {
+                        script.onload = function () {
+                            zE("webWidget:on", "open", function () {
+                                return window.open('https://ndow.zendesk.com/hc/en-us', '_blank');
+                            });
+                        }
+                    }
+                }
+
+                document.body.appendChild(script);
+            }
+        }
+
+        loadZendeskScript()
+        setFaviconUrl()
+    </script>
+    <script id="ze-snippet"
+        src="https://static.zdassets.com/ekr/snippet.js?key=ee637346-66dd-4a9f-85b2-6ce670a45839"></script>
+    <link href="https://cdn.jsdelivr.net/gh/gw19/Eleganttips.css@1.2.1/eleganttips.min.css" rel="stylesheet" /><iframe
+        height="0" style="display: none; visibility: hidden;" width="0"></iframe><iframe allow="join-ad-interest-group"
+        data-load-time="1753311358823" data-tagging-id="AW-1071114321" height="0"
+        src="https://td.doubleclick.net/td/rul/1071114321?random=1753311358821&amp;cv=11&amp;fst=1753311358821&amp;fmt=3&amp;bg=ffffff&amp;guid=ON&amp;async=1&amp;gtm=45be57m0v9167475895z878670453za200zb78670453zd78670453&amp;gcd=13l3l3l3l1l1&amp;dma=0&amp;tag_exp=101509157~103116026~103200004~103233427~104684208~104684211~104948813&amp;u_w=1920&amp;u_h=1080&amp;url=https%3A%2F%2Fnevada.licensing.app%2Ffirst_come_first_serve&amp;hn=www.googleadservices.com&amp;frm=0&amp;tiba=Nevada%20Department%20of%20Wildlife&amp;npa=0&amp;pscdl=noapi&amp;auid=812944583.1753311234&amp;uaa=x86&amp;uab=64&amp;uafvl=Not)A%253BBrand%3B8.0.0.0%7CChromium%3B138.0.7204.158%7CGoogle%2520Chrome%3B138.0.7204.158&amp;uamb=0&amp;uam=&amp;uap=Windows&amp;uapv=19.0.0&amp;uaw=0&amp;fledge=1&amp;_tu=Cg"
+        style="display: none; visibility: hidden;" width="0"></iframe>
+    <iframe allow="microphone *" aria-hidden="true" data-product="web_widget" role="presentation" src="about:blank"
+        style="width: 0px; height: 0px; border: 0px; position: absolute; top: -9999px;" tabindex="-1"
+        title="No content"></iframe><iframe aria-hidden="true" id="_hjSafeContext_85787432" src="about:blank"
+        style="display: none !important; width: 1px !important; height: 1px !important; opacity: 0 !important; pointer-events: none !important;"
+        tabindex="-1" title="_hjSafeContext"></iframe>
+    <div><iframe id="launcher"
+            style="color-scheme: light; width: 108px; height: 50px; padding: 0px; margin: 10px 20px; position: fixed; bottom: 0px; overflow: visible; opacity: 1; border: 0px; z-index: 999998; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; right: 0px;"
+            tabindex="0" title="Opens a widget where you can find more information"></iframe></div>
+</body>

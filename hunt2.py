@@ -12,7 +12,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import csv
-import requests
+import re
 from bs4 import BeautifulSoup
 from datetime import datetime
 # ————— Setup Chrome —————
@@ -49,44 +49,90 @@ driver = webdriver.Chrome(options=options)
 # ————— Load credentials —————
 load_dotenv()
 
-def is_tag_processed(tag_name, tag_description):
+def is_tag_processed(tag_name, unit, tag_type, dates):
     today = datetime.now().strftime("%Y-%m-%d")
-    
-    if os.path.exists("processed_tags.csv"):
-        with open("processed_tags.csv", "r", newline='', encoding='utf-8') as file:
-            reader = csv.reader(file)
-            next(reader)  # Skip the header row
-            for row in reader:
-                stored_name, stored_description, stored_date, _ = row  # Ignore time column (last one)
-                if stored_name == tag_name and stored_description == tag_description and stored_date == today:
-                    return True  # Tag already processed today
+    if not os.path.exists("processed_tags.csv"):
+        return False
+
+    with open("processed_tags.csv", newline="", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        header = next(reader, None)  # Skip header if present
+        for row in reader:
+            stored_name, stored_unit, stored_type, stored_dates, stored_date = row
+            if (stored_name == tag_name and
+                stored_unit == unit and
+                stored_type == tag_type and
+                stored_dates == dates and
+                stored_date == today):
+                return True
     return False
 
-
-# Function to store the processed tag in the CSV file
-def store_processed_tag(tag_name, tag_description):
-    today = datetime.now().strftime("%Y-%m-%d")
-    current_time = datetime.now().strftime("%H:%M:%S")
-    with open("processed_tags.csv", "a", newline='', encoding='utf-8') as file:
-        writer = csv.writer(file)
-        writer.writerow([tag_name, tag_description, today, current_time])  # Save tag, description, and date
+def parse_tag_description(raw):
+    """
+    Given a raw description like:
+      "Unit: 061, 062, 064, 071, 073   •   Archery   •   Aug 01, 2025 - Aug 21, 2025"
+    return a dict with keys 'unit', 'type', 'dates'.
+    """
+    # 1) Collapse all whitespace into single spaces
+    cleaned = re.sub(r'\s+', ' ', raw).strip()
+    # 2) Split on bullet
+    parts = [p.strip() for p in cleaned.split('•')]
+    return {
+        'unit': parts[0] if len(parts) > 0 else None,
+        'type': parts[1] if len(parts) > 1 else None,
+        'dates': parts[2] if len(parts) > 2 else None,
+    }
 
 def scrape_tag_details_from_page(grid):
+    # print(grid)
+    tag_name = None
+    tag_description = None
     try:
         # Scrape the tag name and description
-        tag_name = grid.find('span', class_='product-name')
-        if tag_name:
-            tag_name = tag_name.get_text(strip=True)
-            
-            # Find the <p> tag following the product name span (sibling element)
-            tag_description = tag_name.find_next('p')
+        eligible = (
+            grid.find('mat-chip', string=re.compile(r'\bELIGIBLE\b'))
+        )
+        if not eligible:
+            return None, None
+        if eligible.get_text(strip=True) == 'ELIGIBLE':
+            eligible_parent = eligible.parent.parent
+            tag_name = eligible_parent.find('span', class_='product-name')
+            if tag_name:
+                tag_name = tag_name.get_text(strip=True)
+                # print(tag_name)
+            tag_description = eligible_parent.find('p')
             if tag_description:
                 tag_description = tag_description.get_text(strip=True)
-
+                # print(tag_description)
         return tag_name, tag_description
     except Exception as e:
         print(f"Error scraping tag details: {e}")
         return None, None
+
+def store_processed_tag(tag_name, unit, hunt_type, dates):
+    today = datetime.now().strftime("%Y-%m-%d")
+    # if you don’t yet have a header row, you can write one yourself:
+    if not os.path.exists("processed_tags.csv"):
+        with open("processed_tags.csv", "w", newline="", encoding="utf-8") as f:
+            w = csv.writer(f)
+            w.writerow(["tag_name","unit","type","dates","date_recorded"])
+    # now append the new line
+    with open("processed_tags.csv", "a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow([tag_name, unit, hunt_type, dates, today])
+
+def parse_tag_description(raw):
+    """
+    Given something like:
+      "Unit: 061, 062, 064, 071, 073   •   Archery   •   Aug 01, 2025 - Aug 21, 2025"
+    return a tuple (unit, hunt_type, dates).
+    """
+    cleaned = re.sub(r'\s+', ' ', raw).strip()
+    parts  = [p.strip() for p in cleaned.split('•')]
+    unit       = parts[0] if len(parts)>0 else ""
+    hunt_type  = parts[1] if len(parts)>1 else ""
+    dates      = parts[2] if len(parts)>2 else ""
+    return unit, hunt_type, dates
     
 def send_email(subject: str, body: str) -> bool:
     SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
@@ -234,6 +280,7 @@ while True:
             )
             submit_btn.click()
     try:
+      
         # 4) Wait for ELIGIBLE badge
         print("Waiting form ELIGIBILITY")
         WebDriverWait(driver, POST_REFRESH_WAIT).until(
@@ -242,21 +289,29 @@ while True:
         print(f"[{time.strftime('%X')}] 🎉 You are now ELIGIBLE!")
         winsound.MessageBeep()
         page_source = driver.page_source
+        # print(page_source)
         soup = BeautifulSoup(page_source, 'html.parser')
-        grids = soup.find_all('div', class_='mdl-grid')
+        grids = soup.find_all('mat-card', class_='mat-card')
+        # print(grids)
         for grid in grids:
             tag_name, tag_description = scrape_tag_details_from_page(grid)
-
+            # print(parse_tag_description(tag_description))
+            unit, hunt_type, dates = parse_tag_description(tag_description)
+            print(tag_name, " ", is_tag_processed(tag_name, unit, hunt_type, dates))
             if tag_name and tag_description:
-                if not is_tag_processed(tag_name, tag_description):
+                if not is_tag_processed(tag_name, unit, hunt_type, dates):
                     print(f"New tag found: {tag_name}")
                     # Send email notification
                     send_email(
                         subject="🏷️ Nevada Tag Available!",
-                        body=f"The FCFS page just showed '{tag_name}'. Description: {tag_description}. Head to https://nevada.licensing.app to add to cart!"
+                        body=(
+                            f"The FCFS page just showed '{tag_name}'. "
+                            f"Description: {unit} • {hunt_type} • {dates}. "
+                            "Head to https://nevada.licensing.app to add to cart!"
+                        )
                     )
                     # Store the processed tag so it doesn't send again
-                    store_processed_tag(tag_name, tag_description)
+                    store_processed_tag(tag_name, unit, hunt_type, dates)
                 else:
                     print(f"Tag '{tag_name}' with description '{tag_description}' has already been processed today. Skipping email.")
             else:
