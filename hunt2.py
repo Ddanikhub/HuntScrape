@@ -11,7 +11,10 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+import csv
+import requests
+from bs4 import BeautifulSoup
+from datetime import datetime
 # ————— Setup Chrome —————
 options = webdriver.ChromeOptions()
 options.add_argument("--no-sandbox")
@@ -46,6 +49,45 @@ driver = webdriver.Chrome(options=options)
 # ————— Load credentials —————
 load_dotenv()
 
+def is_tag_processed(tag_name, tag_description):
+    today = datetime.now().strftime("%Y-%m-%d")
+    
+    if os.path.exists("processed_tags.csv"):
+        with open("processed_tags.csv", "r", newline='', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            next(reader)  # Skip the header row
+            for row in reader:
+                stored_name, stored_description, stored_date, _ = row  # Ignore time column (last one)
+                if stored_name == tag_name and stored_description == tag_description and stored_date == today:
+                    return True  # Tag already processed today
+    return False
+
+
+# Function to store the processed tag in the CSV file
+def store_processed_tag(tag_name, tag_description):
+    today = datetime.now().strftime("%Y-%m-%d")
+    current_time = datetime.now().strftime("%H:%M:%S")
+    with open("processed_tags.csv", "a", newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerow([tag_name, tag_description, today, current_time])  # Save tag, description, and date
+
+def scrape_tag_details_from_page(grid):
+    try:
+        # Scrape the tag name and description
+        tag_name = grid.find('span', class_='product-name')
+        if tag_name:
+            tag_name = tag_name.get_text(strip=True)
+            
+            # Find the <p> tag following the product name span (sibling element)
+            tag_description = tag_name.find_next('p')
+            if tag_description:
+                tag_description = tag_description.get_text(strip=True)
+
+        return tag_name, tag_description
+    except Exception as e:
+        print(f"Error scraping tag details: {e}")
+        return None, None
+    
 def send_email(subject: str, body: str) -> bool:
     SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
     SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
@@ -199,15 +241,26 @@ while True:
         )
         print(f"[{time.strftime('%X')}] 🎉 You are now ELIGIBLE!")
         winsound.MessageBeep()
+        page_source = driver.page_source
+        soup = BeautifulSoup(page_source, 'html.parser')
+        grids = soup.find_all('div', class_='mdl-grid')
+        for grid in grids:
+            tag_name, tag_description = scrape_tag_details_from_page(grid)
 
-        # 5) Email alert
-        if send_email(
-            subject="🏷️ Nevada Tag Available!",
-            body="The FCFS page just showed ‘ELIGIBLE’. Head to https://nevada.licensing.app to add to cart!"
-        ):
-            print("Notification email delivered.")
-        else:
-            print("Email failed — check SMTP settings.")
+            if tag_name and tag_description:
+                if not is_tag_processed(tag_name, tag_description):
+                    print(f"New tag found: {tag_name}")
+                    # Send email notification
+                    send_email(
+                        subject="🏷️ Nevada Tag Available!",
+                        body=f"The FCFS page just showed '{tag_name}'. Description: {tag_description}. Head to https://nevada.licensing.app to add to cart!"
+                    )
+                    # Store the processed tag so it doesn't send again
+                    store_processed_tag(tag_name, tag_description)
+                else:
+                    print(f"Tag '{tag_name}' with description '{tag_description}' has already been processed today. Skipping email.")
+            else:
+                print("No tag details found.")
 
         time.sleep(5 * 60)
 
