@@ -44,9 +44,9 @@ def is_tag_processed(tag_name, hunt_unit, tag_type, hunt_dates):
     # otherwise look for a matching row
     for row in rows:
         # skip any malformed lines
-        if len(row) < 6:
+        if len(row) < 7:
             continue
-        stored_name, stored_unit, stored_type, stored_dates, stored_date, _ = row
+        stored_name, stored_unit, stored_type, stored_dates, stored_date, _, _ = row
         if (stored_name   == tag_name and
             stored_unit   == hunt_unit and
             stored_type   == tag_type and
@@ -61,8 +61,11 @@ def scrape_tag_details_from_page(grid):
     # print(grid)
     tag_name = None
     tag_description = None
+    tag_img = None
     try:
         # Scrape the tag name and description
+        tag_img = grid.find('img')['src']
+        print(tag_img)
         eligible = (
             grid.find('mat-chip', string=re.compile(r'\bELIGIBLE\b'))
         )
@@ -78,12 +81,12 @@ def scrape_tag_details_from_page(grid):
             if tag_description:
                 tag_description = tag_description.get_text(strip=True)
                 print(tag_description)
-        return tag_name, tag_description
+        return tag_name, tag_description, tag_img
     except Exception as e:
         print(f"Error scraping tag details: {e}")
         return None, None
 
-def store_processed_tag(tag_name, unit, hunt_type, dates):
+def store_processed_tag(tag_name, unit, hunt_type, dates, tag_imag):
     today = datetime.now().strftime("%Y-%m-%d")
     toda_time = datetime.now().strftime("%H:%M")
     # if you don’t yet have a header row, you can write one yourself:
@@ -94,7 +97,7 @@ def store_processed_tag(tag_name, unit, hunt_type, dates):
     # now append the new line
     with open("processed_tags.csv", "a", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow([tag_name, unit, hunt_type, dates, today, toda_time])
+        w.writerow([tag_name, unit, hunt_type, dates, today, toda_time, tag_img])
 
 def parse_tag_description(raw):
     """
@@ -112,12 +115,12 @@ def parse_tag_description(raw):
 grids = soup.find_all('mat-card', class_='mat-card')
 # print(grids)
 for grid in grids:
-    tag_name, tag_description = scrape_tag_details_from_page(grid)
+    tag_name, tag_description, tag_img= scrape_tag_details_from_page(grid)
     print(parse_tag_description(tag_description))
     unit, hunt_type, dates = parse_tag_description(tag_description)
     # 
     if not is_tag_processed(tag_name, unit, hunt_type, dates):
-        store_processed_tag(tag_name, unit, hunt_type, dates)
+        store_processed_tag(tag_name, unit, hunt_type, dates, tag_img)
         print(is_tag_processed(tag_name, unit, hunt_type, dates))
     # if tag_name and tag_description:
         # print(f"Tag Name: {tag_name}, Description: {tag_description}")

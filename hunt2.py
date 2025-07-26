@@ -68,9 +68,9 @@ def is_tag_processed(tag_name, hunt_unit, tag_type, hunt_dates):
     # otherwise look for a matching row
     for row in rows:
         # skip any malformed lines
-        if len(row) < 6:
+        if len(row) < 7:
             continue
-        stored_name, stored_unit, stored_type, stored_dates, stored_date, _ = row
+        stored_name, stored_unit, stored_type, stored_dates, stored_date, _, _ = row
         if (stored_name   == tag_name and
             stored_unit   == hunt_unit and
             stored_type   == tag_type and
@@ -84,8 +84,11 @@ def scrape_tag_details_from_page(grid):
     # print(grid)
     tag_name = None
     tag_description = None
+    tag_img = None
     try:
         # Scrape the tag name and description
+        tag_img = grid.find('img')['src']
+        print(tag_img)
         eligible = (
             grid.find('mat-chip', string=re.compile(r'\bELIGIBLE\b'))
         )
@@ -96,12 +99,12 @@ def scrape_tag_details_from_page(grid):
             tag_name = eligible_parent.find('span', class_='product-name')
             if tag_name:
                 tag_name = tag_name.get_text(strip=True)
-                # print(tag_name)
+                print(tag_name)
             tag_description = eligible_parent.find('p')
             if tag_description:
                 tag_description = tag_description.get_text(strip=True)
-                # print(tag_description)
-        return tag_name, tag_description
+                print(tag_description)
+        return tag_name, tag_description, tag_img
     except Exception as e:
         print(f"Error scraping tag details: {e}")
         return None, None
@@ -292,7 +295,7 @@ while True:
         grids = soup.find_all('mat-card', class_='mat-card')
         # print(grids)
         for grid in grids:
-            tag_name, tag_description = scrape_tag_details_from_page(grid)
+            tag_name, tag_description, tag_img= scrape_tag_details_from_page(grid)
             # print(parse_tag_description(tag_description))
             if tag_name and tag_description:
                 hunt_unit, hunt_type, hunt_dates = parse_tag_description(tag_description)
@@ -308,7 +311,7 @@ while True:
                         )
                     )
                     # Store the processed tag so it doesn't send again
-                    store_processed_tag(tag_name, hunt_unit, hunt_type, hunt_dates)
+                    store_processed_tag(tag_name, hunt_unit, hunt_type, hunt_dates, tag_img)
                 else:
                     print(f"Tag '{tag_name}' with description '{tag_description}' has already been processed today. Skipping email.")
             else:
