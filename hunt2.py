@@ -32,7 +32,7 @@ prefs = {
     "profile.password_manager_leak_detection": False
 }
 options.add_experimental_option("prefs", prefs)
-
+options.add_experimental_option("excludeSwitches", ["enable-automation"])
 # 2) Disable the feature flags
 options.add_argument(
     "--disable-features="
