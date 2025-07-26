@@ -25,22 +25,35 @@ with open("./html_with_tag.html", "r", encoding="utf-8") as file:
 soup = BeautifulSoup(html_content, 'html.parser')
 # print(soup)
 
-def is_tag_processed(tag_name, unit, tag_type, dates):
-    today = datetime.now().strftime("%Y-%m-%d")
+def is_tag_processed(tag_name, hunt_unit, tag_type, hunt_dates):
+    today_date = datetime.now().strftime("%Y-%m-%d")
     if not os.path.exists("processed_tags.csv"):
         return False
 
     with open("processed_tags.csv", newline="", encoding="utf-8") as f:
         reader = csv.reader(f)
-        next(reader, None)  # Skip header if present
-        for row in reader:
-            stored_name, stored_unit, stored_type, stored_dates, stored_date, _ = row
-            if (stored_name == tag_name and
-                stored_unit == unit and
-                stored_type == tag_type and
-                stored_dates == dates and
-                stored_date == today):
-                return True
+        # skip header
+        next(reader, None)
+        # read the rest
+        rows = list(reader)
+
+    # if there's nothing but the header, treat it as "already processed"
+    if not rows:
+        return False
+
+    # otherwise look for a matching row
+    for row in rows:
+        # skip any malformed lines
+        if len(row) < 6:
+            continue
+        stored_name, stored_unit, stored_type, stored_dates, stored_date, _ = row
+        if (stored_name   == tag_name and
+            stored_unit   == hunt_unit and
+            stored_type   == tag_type and
+            stored_dates  == hunt_dates and
+            stored_date   == today_date):
+            return True
+
     return False
 
 
@@ -103,8 +116,8 @@ for grid in grids:
     print(parse_tag_description(tag_description))
     unit, hunt_type, dates = parse_tag_description(tag_description)
     # 
-    store_processed_tag(tag_name, unit, hunt_type, dates)
-    time.sleep(5)
-    print(is_tag_processed(tag_name, unit, hunt_type, dates))
+    if not is_tag_processed(tag_name, unit, hunt_type, dates):
+        store_processed_tag(tag_name, unit, hunt_type, dates)
+        print(is_tag_processed(tag_name, unit, hunt_type, dates))
     # if tag_name and tag_description:
         # print(f"Tag Name: {tag_name}, Description: {tag_description}")

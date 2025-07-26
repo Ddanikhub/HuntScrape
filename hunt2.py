@@ -49,22 +49,35 @@ driver = webdriver.Chrome(options=options)
 # ————— Load credentials —————
 load_dotenv()
 
-def is_tag_processed(tag_name, unit, tag_type, dates):
-    today = datetime.now().strftime("%Y-%m-%d")
+def is_tag_processed(tag_name, hunt_unit, tag_type, hunt_dates):
+    today_date = datetime.now().strftime("%Y-%m-%d")
     if not os.path.exists("processed_tags.csv"):
         return False
 
     with open("processed_tags.csv", newline="", encoding="utf-8") as f:
         reader = csv.reader(f)
-        next(reader, None)  # Skip header if present
-        for row in reader:
-            stored_name, stored_unit, stored_type, stored_dates, stored_date, _ = row
-            if (stored_name == tag_name and
-                stored_unit == unit and
-                stored_type == tag_type and
-                stored_dates == dates and
-                stored_date == today):
-                return True
+        # skip header
+        next(reader, None)
+        # read the rest
+        rows = list(reader)
+
+    # if there's nothing but the header, treat it as "already processed"
+    if not rows:
+        return False
+
+    # otherwise look for a matching row
+    for row in rows:
+        # skip any malformed lines
+        if len(row) < 6:
+            continue
+        stored_name, stored_unit, stored_type, stored_dates, stored_date, _ = row
+        if (stored_name   == tag_name and
+            stored_unit   == hunt_unit and
+            stored_type   == tag_type and
+            stored_dates  == hunt_dates and
+            stored_date   == today_date):
+            return True
+
     return False
 
 def scrape_tag_details_from_page(grid):
@@ -93,9 +106,9 @@ def scrape_tag_details_from_page(grid):
         print(f"Error scraping tag details: {e}")
         return None, None
 
-def store_processed_tag(tag_name, unit, hunt_type, dates):
-    today = datetime.now().strftime("%Y-%m-%d")
-    toda_time = datetime.now().strftime("%H:%M")
+def store_processed_tag(tag_name, hunt_unit, hunt_type, hunt_dates):
+    today_date = datetime.now().strftime("%Y-%m-%d")
+    today_time = datetime.now().strftime("%H:%M")
     # if you don’t yet have a header row, you can write one yourself:
     if not os.path.exists("processed_tags.csv"):
         with open("processed_tags.csv", "w", newline="", encoding="utf-8") as f:
@@ -104,7 +117,7 @@ def store_processed_tag(tag_name, unit, hunt_type, dates):
     # now append the new line
     with open("processed_tags.csv", "a", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow([tag_name, unit, hunt_type, dates, today, toda_time])
+        w.writerow([tag_name, hunt_unit, hunt_type, hunt_dates, today_date, today_time])
 
 def parse_tag_description(raw):
     """
@@ -281,21 +294,21 @@ while True:
         for grid in grids:
             tag_name, tag_description = scrape_tag_details_from_page(grid)
             # print(parse_tag_description(tag_description))
-            unit, hunt_type, hunt_dates = parse_tag_description(tag_description)
             if tag_name and tag_description:
-                if not is_tag_processed(tag_name, unit, hunt_type, hunt_dates):
-                    print(f"New tag found: {tag_name}")
+                hunt_unit, hunt_type, hunt_dates = parse_tag_description(tag_description)
+                if is_tag_processed(tag_name, hunt_unit, hunt_type, hunt_dates):
+                    print(f"New tag found: {tag_name} {tag_description}")
                     # Send email notification
                     send_email(
                         subject="🏷️ Nevada Tag Available!",
                         body=(
                             f"The FCFS page just showed '{tag_name}'. "
-                            f"Description: {unit} • {hunt_type} • {hunt_dates}. "
+                            f"Description: {hunt_unit} • {hunt_type} • {hunt_dates}. "
                             "Head to https://nevada.licensing.app to add to cart!"
                         )
                     )
                     # Store the processed tag so it doesn't send again
-                    store_processed_tag(tag_name, unit, hunt_type, hunt_dates)
+                    store_processed_tag(tag_name, hunt_unit, hunt_type, hunt_dates)
                 else:
                     print(f"Tag '{tag_name}' with description '{tag_description}' has already been processed today. Skipping email.")
             else:
