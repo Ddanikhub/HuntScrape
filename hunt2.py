@@ -15,6 +15,7 @@ import csv
 import re
 from bs4 import BeautifulSoup
 from datetime import datetime
+import random
 # ————— Setup Chrome —————
 options = webdriver.ChromeOptions()
 options.add_argument("--no-sandbox")
@@ -198,7 +199,13 @@ def log_in():
 
 log_in()
 time.sleep(5)  # give the page its initial load
-
+def get_random_interval(min_seconds=60, max_seconds=14*60):
+    """
+    Return a random number of seconds corresponding to
+    a random integer minute value between min_minutes and max_minutes.
+    """
+    seonds = random.randint(min_seconds, max_seconds)
+    return seonds
 # ————— Heartbeat thread —————
 def keep_alive():
     while True:
@@ -217,7 +224,10 @@ def keep_alive():
         except:
             pass
 
-        time.sleep(14 * 60)  # every 3 minutes
+        # sleep for a random 1–14 minutes
+        interval = get_random_interval(60, 14*60)
+        print(f"[keep_alive] sleeping for {interval} seconds")
+        time.sleep(interval)
 
 threading.Thread(target=keep_alive, daemon=True).start()
 

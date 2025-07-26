@@ -18,7 +18,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 import re
-
+import random
 # add url to to bs4
 with open("./html_with_tag.html", "r", encoding="utf-8") as file:
     html_content = file.read()
@@ -111,8 +111,25 @@ def parse_tag_description(raw):
     hunt_type  = parts[1] if len(parts)>1 else ""
     dates      = parts[2] if len(parts)>2 else ""
     return unit, hunt_type, dates
+def get_random_interval(min_seconds=60, max_seconds=14*60):
+    """
+    Return a random number of seconds corresponding to
+    a random integer minute value between min_minutes and max_minutes.
+    """
+    seonds = random.randint(min_seconds, max_seconds)
+    return seonds
+def keep_alive():
+    while True:
+        
+        interval = get_random_interval(60, 14*60)
+        print(f"[keep_alive] sleeping for {interval} seconds")
+        time.sleep(interval)
+
+threading.Thread(target=keep_alive, daemon=True).start()
 
 grids = soup.find_all('mat-card', class_='mat-card')
+
+
 # print(grids)
 for grid in grids:
     tag_name, tag_description, tag_img= scrape_tag_details_from_page(grid)
